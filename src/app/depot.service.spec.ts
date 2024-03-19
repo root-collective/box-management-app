@@ -14,6 +14,28 @@ describe('DepotService', () => {
     expect(service).toBeTruthy();
   });
 
+  describe('getById', () => {
+    it('should return depot of id 1', () => {
+      // Arrange
+
+      // Act
+      let result = service.depotById(1);
+
+      // Assert
+      expect(result).toBe(service.depots.find(d => d.id === 1)!);
+    });
+
+    it('should return undefined if id is -1', () => {
+      // Arrange
+
+      // Act
+      let result = service.depotById(-1);
+
+      // Assert
+      expect(result).toBeUndefined();
+    });
+  });
+
   describe('transferBoxes', () => {
     it('should transfer number of boxes', () => {
       // Arrange
@@ -60,4 +82,42 @@ describe('DepotService', () => {
       expect(() => service.transferBoxes(1, 2, exceedingNumberOfBoxes)).toThrowError(`${exceedingNumberOfBoxes} exceeds the number of available boxes in the source.`);
     });
   });
+
+  describe('depotsExceptIds', () => {
+    it('should return all depots if ids are empty', () => {
+      // Arrange
+      const emptyIds: number[] = [];
+
+      // Act
+      const result = service.depotsExceptIds(emptyIds);
+
+      // Assert
+      expect(result.length).toBe(3);
+    });
+
+    it('should return all depots without id 1', () => {
+      // Arrange
+      const singleId: number[] = [1];
+
+      // Act
+      const result = service.depotsExceptIds(singleId);
+
+      // Assert
+      expect(result.length).toBe(2);
+      expect(result).toContain(service.depots.find(d => d.id == 2)!);
+      expect(result).toContain(service.depots.find(d => d.id == 3)!);
+    });
+
+    it('should return all depots without id 1 and 3', () => {
+      // Arrange
+      const singleId: number[] = [1, 3];
+
+      // Act
+      const result = service.depotsExceptIds(singleId);
+
+      // Assert
+      expect(result.length).toBe(1);
+      expect(result).toContain(service.depots.find(d => d.id == 2)!);
+    });
+  })
 });

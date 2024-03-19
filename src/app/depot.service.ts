@@ -17,9 +17,19 @@ export class DepotService {
     return this._depots;
   }
 
-  public transferBoxes(sourceDepotId : number, targetDepotId : number, numberOfBoxes : number) {
-    let sourceDepot = this._depots.find(d => d.id === sourceDepotId);
-    let targetDepot = this._depots.find(d => d.id === targetDepotId);
+  public depotsExceptIds(ids: number[]) : Depot[] {
+    return this._depots.filter(d => {
+      return !ids.find(i => d.id === i);
+    });
+  }
+
+  public depotById(id: number) : Depot | undefined {
+    return this._depots.find(d => d.id === id);
+  }
+
+  public transferBoxes(sourceDepotId : number, targetDepotId : number, numberOfBoxes : number) : void {
+    const sourceDepot = this.depotById(sourceDepotId);
+    const targetDepot = this.depotById(targetDepotId);
 
     if (sourceDepot === null) {
       throw new Error('Source depot not found');

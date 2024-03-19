@@ -3,7 +3,7 @@ import { Depot } from './depot';
 describe('Depot', () => {
   describe('default constructor', () => {
     it('should create an instance with 0 number of boxes', () => {
-      let depot = new Depot(1, 'Test-Depot'); 
+      const depot = new Depot(1, 'Test-Depot');
 
       expect(depot.id).toBe(1);
       expect(depot.name).toBe('Test-Depot'),
@@ -11,7 +11,7 @@ describe('Depot', () => {
     });
 
     it('should create an instance with the given number of boxes', () => {
-      let depot = new Depot(1, 'Test-Depot', 10); 
+      const depot = new Depot(1, 'Test-Depot', 10);
 
       expect(depot.id).toBe(1);
       expect(depot.name).toBe('Test-Depot'),
