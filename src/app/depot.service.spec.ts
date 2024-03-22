@@ -47,7 +47,7 @@ describe('DepotService', () => {
 
       // Assert
       expect(sourceDepot.numberOfBoxes).toBe(190);
-      expect(targetDepot.numberOfBoxes).toBe(10);
+      expect(targetDepot.numberOfBoxes).toBe(70);
     });
 
     it('should throw error if source depot id is not available', () => {

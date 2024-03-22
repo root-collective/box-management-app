@@ -7,6 +7,7 @@
           <mat-option *ngFor="let depot of getUnselectedDepots(depotTransferForm.controls.targetDepot.value)" [value]="depot.id">{{depot.name}}</mat-option>
         </mat-select>
       </mat-form-field>
+      <span id="sourceDepotBoxCount">{{maximumNumberOfBoxesInSelectedSourceDepot}}</span>
 
       <mat-form-field>
         <mat-label>Target depot</mat-label>
@@ -14,16 +15,24 @@
           <mat-option *ngFor="let depot of getUnselectedDepots(depotTransferForm.controls.sourceDepot.value)" [value]="depot.id">{{depot.name}}</mat-option>
         </mat-select>
       </mat-form-field>
+      <span id="targetDepotBoxCount">{{maximumNumberOfBoxesInSelectedTargetDepot}}</span>
     </div>
 
-    <mat-form-field>
-      <mat-label>Number of boxes</mat-label>
-      <mat-slider id="numberOfBoxesSlider" min="0" [max]="maximumNumberOfBoxesInSelectedSourceDepot" step="1" value="1" [disabled]="!sourceSelected">
-        <input matSliderThumb formControlName="numberOfBoxes" id="numberOfBoxesInput">
-      </mat-slider>
-      <textarea matInput hidden></textarea>
-      <label class="number-of-boxes-value-label">{{depotTransferForm.controls.numberOfBoxes.value}}</label>
-    </mat-form-field>
+    <div>
+      <mat-form-field>
+        <mat-label>Number of boxes</mat-label>
+        <mat-slider id="numberOfBoxesSlider" min="0" [max]="maximumNumberOfBoxesInSelectedSourceDepot" step="1" value="1" [disabled]="!sourceSelected">
+          <input matSliderThumb formControlName="numberOfBoxes" id="numberOfBoxesInput">
+        </mat-slider>
+        <textarea matInput hidden></textarea>
+        <label class="number-of-boxes-value-label">{{depotTransferForm.controls.numberOfBoxes.value}}</label>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" [disabled]="!(sourceSelected && targetSelected)" (click)="transfer()">Transfer</button>
+      <button mat-raised-button color="primary" [disabled]="!(sourceSelected || targetSelected)" (click)="reset()">Reset</button>
+    </div>
+
+    <span id="transferResult">{{transferResultMessage}}</span>
   </form>
 </main>
 

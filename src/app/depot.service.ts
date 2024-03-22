@@ -7,7 +7,7 @@ import { Depot } from './depot';
 export class DepotService {
   private readonly _depots = [
     new Depot(1, 'Langenklint', 200),
-    new Depot(2, 'Gifhorn', 0),
+    new Depot(2, 'Gifhorn', 60),
     new Depot(3, 'Meinersen', 0),
   ];
 
