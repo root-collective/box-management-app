@@ -6,6 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { BarcodeFormat } from '@zxing/library';
 import { DepotService } from './depot.service';
 import { Depot } from './depot';
 
@@ -18,7 +20,8 @@ import { Depot } from './depot';
     MatFormFieldModule,
     MatSliderModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    ZXingScannerModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -37,6 +40,8 @@ export class AppComponent {
   sourceDepot : Depot | undefined;
   targetDepot : Depot | undefined;
   transferResultMessage: string = '';
+  allowedBarcodeFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX, BarcodeFormat.AZTEC, BarcodeFormat.CODE_39 ];
+  detectedBoxIds : Set<string> = new Set<string>();
 
   constructor(private formBuilder: FormBuilder,
     private depotService: DepotService) {}
@@ -79,6 +84,12 @@ export class AppComponent {
     const selectedDepotIds: number[] = selectedDepotId == null ? [] : [parseInt(selectedDepotId)];
 
     return this.depotService.depotsExceptIds(selectedDepotIds);
+  }
+
+  public processSuccededScan(result : string) : void {
+    console.log(result);
+
+    this.detectedBoxIds.add(result);
   }
 
   public transfer() : void {
