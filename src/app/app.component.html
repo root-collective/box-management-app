@@ -33,6 +33,14 @@
     </div>
 
     <span id="transferResult">{{transferResultMessage}}</span>
+
+    @for (id of detectedBoxIds; track id) {
+      <li>{{ id }}</li>
+    } @empty {
+      <li>There are no items.</li>
+    }
+
+    <zxing-scanner [tryHarder]="true" [formats]="allowedBarcodeFormats" (scanSuccess)="processSuccededScan($event)"></zxing-scanner>
   </form>
 </main>
 
