@@ -30,8 +30,30 @@ jobs:
     - name: Install Angular CLI
       run: npm install -g @angular/cli
     - run: npm ci
-    - run: npm run build --omit=dev --if-present
+    - run: ng build --configuration "production" --base-href="https://root-collective.github.io/box-management-app/"
     - name: Run headless test
       run: ng test --watch=false --browsers=ChromeHeadless --code-coverage
       env:
         CI: true
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: 'dist/box-management-app/browser'
+
+  deploy:
+    needs: build
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
