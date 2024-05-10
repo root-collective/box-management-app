@@ -1,17 +1,56 @@
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { DepotService } from './depot.service';
+import { HttpClient } from '@angular/common/http';
+
+import { DepotService, Station, StationWithBoxEstimate } from './depot.service';
 
 describe('DepotService', () => {
+  let httpClient: HttpClient;
+  let httpTestingController: HttpTestingController;
   let service: DepotService;
 
+  const depots : Station[] = [
+    { id: 1, name: 'Langenklint', location: '' },
+    { id: 2, name: 'Gifhorn', location: '' },
+    { id: 3, name: 'Meinersen', location: '' }
+  ];
+
+  const depotsWithBoxEstimates : StationWithBoxEstimate[] = [
+    { ...depots[0], estimate_boxes: 200 },
+    { ...depots[1], estimate_boxes: 60 },
+    { ...depots[2], estimate_boxes: 0 },
+  ];
+
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [ HttpClientTestingModule ]
+    });
+    httpClient = TestBed.inject(HttpClient);
+    httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(DepotService);
+
+    const req = httpTestingController.expectOne('https://localhost/boxmanagement/station/');
+    expect(req.request.method).toEqual('GET');
+    req.flush(depots);
+
+    depotsWithBoxEstimates.forEach(depot => {
+      const req = httpTestingController.expectOne(`https://localhost/boxmanagement/station/${depot.id}`);
+      expect(req.request.method).toEqual('GET');
+      req.flush(depot);
+    });
+  });
+
+  afterEach(() => {
+    httpTestingController.verify();
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('should have loaded all depots at creation', () => {
+    expect(service.depots.length).toBe(3);
   });
 
   describe('getById', () => {
