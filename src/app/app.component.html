@@ -1,47 +1,5 @@
 <main>
-  <form [formGroup]="depotTransferForm">
-    <div>
-      <mat-form-field>
-        <mat-label>Source depot</mat-label>
-        <mat-select formControlName="sourceDepot" id="sourceDepotSelect">
-          <mat-option *ngFor="let depot of getUnselectedDepots(depotTransferForm.controls.targetDepot.value)" [value]="depot.id">{{depot.name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <span id="sourceDepotBoxCount">{{maximumNumberOfBoxesInSelectedSourceDepot}}</span>
-
-      <mat-form-field>
-        <mat-label>Target depot</mat-label>
-        <mat-select formControlName="targetDepot" id="targetDepotSelect">
-          <mat-option *ngFor="let depot of getUnselectedDepots(depotTransferForm.controls.sourceDepot.value)" [value]="depot.id">{{depot.name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <span id="targetDepotBoxCount">{{maximumNumberOfBoxesInSelectedTargetDepot}}</span>
-    </div>
-
-    <div>
-      <mat-form-field>
-        <mat-label>Number of boxes</mat-label>
-        <mat-slider id="numberOfBoxesSlider" min="0" [max]="maximumNumberOfBoxesInSelectedSourceDepot" step="1" value="1" [disabled]="!sourceSelected">
-          <input matSliderThumb formControlName="numberOfBoxes" id="numberOfBoxesInput">
-        </mat-slider>
-        <textarea matInput hidden></textarea>
-        <label class="number-of-boxes-value-label">{{depotTransferForm.controls.numberOfBoxes.value}}</label>
-      </mat-form-field>
-
-      <button mat-raised-button color="primary" [disabled]="!(sourceSelected && targetSelected)" (click)="transfer()">Transfer</button>
-      <button mat-raised-button color="primary" [disabled]="!(sourceSelected || targetSelected)" (click)="reset()">Reset</button>
-    </div>
-
-    <span id="transferResult">{{transferResultMessage}}</span>
-
-    @for (id of detectedBoxIds; track id) {
-      <li>{{ id }}</li>
-    } @empty {
-      <li>There are no items.</li>
-    }
-
-    <zxing-scanner [tryHarder]="true" [formats]="allowedBarcodeFormats" (scanSuccess)="processSuccededScan($event)"></zxing-scanner>
-  </form>
+  <app-transfer></app-transfer>
 </main>
 
 <router-outlet />
