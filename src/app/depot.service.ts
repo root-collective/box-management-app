@@ -69,15 +69,15 @@ export class DepotService {
     return this._depots.find(d => d.id === id);
   }
 
-  public transferBoxes(sourceDepotId : number, targetDepotId : number, numberOfBoxes : number) : void {
+  public transferBoxes(sourceDepotId: number, targetDepotId: number, numberOfBoxes: number) : void {
     const sourceDepot = this.depotById(sourceDepotId);
     const targetDepot = this.depotById(targetDepotId);
 
-    if (sourceDepot === null) {
+    if (sourceDepot === undefined) {
       throw new Error('Source depot not found');
     }
 
-    if (targetDepot === null) {
+    if (targetDepot === undefined) {
       throw new Error('Target depot not found');
     }
 
