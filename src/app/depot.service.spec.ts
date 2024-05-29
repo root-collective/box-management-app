@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { HttpClient } from '@angular/common/http';
 
-import { DepotService, Station, StationWithBoxEstimate } from './depot.service';
+import { DepotService, Inventory, SetInventoryRequest, Station, StationWithBoxEstimate } from './depot.service';
 
 describe('DepotService', () => {
   let httpClient: HttpClient;
@@ -157,6 +157,37 @@ describe('DepotService', () => {
       // Assert
       expect(result.length).toBe(1);
       expect(result).toContain(service.depots.find(d => d.id == 2)!);
+    });
+  })
+
+  describe('setBoxes', () => {
+    it('should set number of boxes', () => {
+      // Arrange
+      const depot = depotsWithBoxEstimates[0];
+      const numberOfBoxes: number = depot.estimate_boxes + 1;
+
+      // Act
+      service.setBoxes(depot.id, numberOfBoxes);
+
+      // Assert
+      const req = httpTestingController.expectOne('https://localhost/boxmanagement/inventory/');
+      expect(req.request.method).toEqual('POST');
+
+      const body: SetInventoryRequest = req.request.body as SetInventoryRequest;
+
+      expect(body.station).toBe(depot.id);
+      expect(body.num_boxes).toBe(numberOfBoxes);
+      expect(body.notes).toBe('');
+
+      req.flush({
+        id: 1,
+        timestamp: new Date(),
+        station: body.station,
+        num_boxes: body.num_boxes,
+        notes: body.notes,
+      } as Inventory);
+
+      expect(service.depotById(depot.id)?.numberOfBoxes).toBe(numberOfBoxes);
     });
   })
 });
