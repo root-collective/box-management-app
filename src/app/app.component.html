@@ -1,5 +1,12 @@
 <main>
-  <app-transfer></app-transfer>
+  <mat-tab-group>
+    <mat-tab label="Transfer">
+      <app-transfer></app-transfer>
+    </mat-tab>
+    <mat-tab label="Inventory">
+      <app-inventory></app-inventory>
+    </mat-tab>
+  </mat-tab-group>
 </main>
 
 <router-outlet />
